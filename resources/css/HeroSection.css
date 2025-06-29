@@ -1,0 +1,24 @@
+
+.hero {
+    display: flex;
+    width: 1530px;
+    height: 814px;
+    background-image: url("../sass/imag/Herosection.png");
+    background-size: cover;
+    margin-bottom: 20px;
+    margin: auto;
+}
+.hero2 {
+    margin-left: 80px;
+    margin-top: -15px;
+    width: 839.24px;
+    height: 690px;
+    padding: 30px;
+    background-image: url("../sass/imag/hero2.png");
+}
+.hero1 {
+    margin-top: 50px;
+    width: 597.86px;
+    height: 581.96px;
+    background-image: url("../sass/imag/hero1.png");
+}
