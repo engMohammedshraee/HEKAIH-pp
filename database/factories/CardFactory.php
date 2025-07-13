@@ -18,7 +18,7 @@ class CardFactory extends Factory
     {
         return [
 
-            'user_id' => fake()->randomElement([1,2,3]),
+            'user_id' => fake()->randomElement([1,2]),
             'titel' => fake()->sentence(15),
             'desc' => fake()->sentence(20),
             'category' => fake()->randomElement([

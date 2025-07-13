@@ -73,4 +73,16 @@ class UserController extends Controller
             'writer' => $writer,
         ]);
     }
+    public function UserDashboard(){
+             $user = auth()->user();
+          $user_stories=$user->cards;
+        // ->latest()->paginate(5)
+        // ->withQueryString();
+        return inertia::render('User/UserDashboard',[
+            'user'=>$user,
+            'cards'=>$user_stories,
+            'status'=>session('status')
+
+        ]);
+    }
 }

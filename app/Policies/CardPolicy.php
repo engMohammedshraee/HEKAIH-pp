@@ -19,9 +19,9 @@ class CardPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Card $card): bool
+    public function view(?User $user, Card $card): bool
     {
-        return false;
+        return $card->user->role !=='محظور' && $card->approved
     }
 
     /**

@@ -3,7 +3,7 @@ import './bootstrap'
 import '../css/app.css'
 import { createApp, h } from 'vue'
 import { createInertiaApp,Head,Link } from '@inertiajs/vue3'
-import Layout from './Layout/Layout.vue'
+import Layout from './Layout/Mainlayouts.vue'
 import {ZiggyVue} from "../../vendor/tightenco/ziggy"
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'

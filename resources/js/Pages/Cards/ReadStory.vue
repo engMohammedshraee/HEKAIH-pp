@@ -64,7 +64,10 @@ const deletcard = () => {
                     </Link>
                 </Title>
                 <div class="bg-yellow-400 p-3 rounded-full flex items-center justify-center w-12 h-12">
+                    <Link :href="route('Card.listen',card.id)">
                     <i class="fa-solid fa-headphones text-black text-3xl"></i>
+
+                    </Link>
                 </div>
             </div>
 

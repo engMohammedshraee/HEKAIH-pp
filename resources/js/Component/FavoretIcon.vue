@@ -40,6 +40,13 @@ const toggleFavorite = () => {
 </script>
 
 <template>
+    <i v-if="$page.component === 'User/FavoriteCards'" class="fa-regular fa-trash-can"
+     :class="[
+      'trash-can',
+      favorite ? 'fa-regular text-white-500' : 'fa-regular text-gray-400',
+    ]"
+
+    @click="toggleFavorite"></i>
   <i
     class="cursor-pointer p-2 rounded transition-all duration-200"
     :class="[

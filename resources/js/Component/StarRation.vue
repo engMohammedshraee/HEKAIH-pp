@@ -8,9 +8,9 @@
       class="w-8 h-8 p-1 rounded-full flex gap-2 items-center justify-center transition"
 
     >
-          <i dir="rtl" class="fa-solid fa-star"
-          :class="`${user.average_rating >= n?'text-yellow-500'
-                                        :'text-black'}
+          <i dir="rtl" class="fa-star text-2xl transition-all duration-200"
+          :class="`${user.average_rating >= n? 'fas text-yellow-300'
+                    : 'far text-gray-400'}
                                        `"></i>
     </button>
   </div>

@@ -16,7 +16,7 @@ console.log(props.users);
     <div class="relative">
         <div class="flex space-x-2 justify-center py-10 mx-auto">
             <InputField
-                class="w-1/2 mr-auto"
+                class="w-1/2 mx-auto"
                 type="search"
                 placeholder="بحث  "
                 icon="magnifying-glass"

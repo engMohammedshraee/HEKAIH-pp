@@ -19,8 +19,8 @@ class RegisterController extends Controller
     $storeuser=$request->validate([
         'name'=>'required|max:10',
         'email'=>'required|email',
-        'password'=>'required|confirmed'
-
+        'type'=>'required',
+        'password'=>'required|confirmed',
     ]);
     $user = User::create($storeuser);
     //send verification email

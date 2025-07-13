@@ -59,7 +59,7 @@ watch(() => props.sound, (newSound) => {
         </label>
 
         <!-- عرض الصوت القديم -->
-        <audio v-if="previewSound" controls class="mt-2 w-full">
+        <audio v-if="previewSound" controls class="mt-2  w-1/2">
             <source :src="previewSound" type="audio/mpeg" />
             متصفحك لا يدعم تشغيل الصوت.
         </audio>

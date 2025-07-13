@@ -10,6 +10,7 @@ use function Termwind\render;
 
 use App\Http\Controllers\auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Builder;
 
 class CardController extends Controller
 {
@@ -21,6 +22,7 @@ class CardController extends Controller
 
     public function index()
     {
+        //we use this for reten favoret story for the crrent user
         $user = auth()->user();
 
         $filters = [
@@ -28,14 +30,30 @@ class CardController extends Controller
             'level' => request('level'),
         ];
 
-        $cards = Card::with(['user', 'userFavorites'])
-            ->filter($filters)
-            ->latest()
-            ->paginate(6)
-            ->through(function ($card) use ($user) {
-                $card->is_favorite = $user ? $card->userFavorites->contains($user->id) : false;
-                return $card;
-            });
+        if ($user) {
+            $cards = Card::whereHas('user', function (Builder $query) {
+                $query->where('role', '!=', 'محظور');
+            })
+                ->with(['user', 'userFavorites'])
+                ->where([
+                    ['approved', '=', true],
+
+                ])
+                ->filter($filters)
+                ->latest()
+                ->paginate(6)
+                ->through(function ($card) use ($user) {
+                    $card->is_favorite = $user ? $card->userFavorites->contains($user->id) : false;
+                    return $card;
+                });
+        } else {
+            $cards = Card::where([
+                ['approved', '=', true],
+
+            ])
+                ->limit(6);
+            return $cards;
+        }
 
         return inertia('Home', [
             'cards' => $cards,
@@ -49,7 +67,10 @@ class CardController extends Controller
      */
     public function create()
     {
-        return inertia::render('Cards/Create');
+        $user = auth()->user();
+        return inertia::render('Cards/Create', [
+            'user' => $user
+        ]);
     }
 
     /**
@@ -78,40 +99,40 @@ class CardController extends Controller
 
     /**
      * Display the specified resource.
-     */public function show(Card $Card)
-{
-    $user = auth()->user();
+     */ public function show(Card $Card)
+    {
+        $user = auth()->user();
 
-    // تحميل التعليقات مع المستخدمين
-    $cardcomment = Card::with(['comments.user'])->findOrFail($Card->id);
+        // تحميل التعليقات مع المستخدمين
+        $cardcomment = Card::with(['comments.user'])->findOrFail($Card->id);
 
-    // تحميل العلاقات الأخرى
-    $Card->load(['user', 'userFavorites', 'ratings']);
+        // تحميل العلاقات الأخرى
+        $Card->load(['user', 'userFavorites', 'ratings']);
 
-    // تحديد هل المستخدم أضافها للمفضلة
-    $Card->is_favorite = $user
-        ? $Card->userFavorites->contains($user->id)
-        : false;
+        // تحديد هل المستخدم أضافها للمفضلة
+        $Card->is_favorite = $user
+            ? $Card->userFavorites->contains($user->id)
+            : false;
 
-    // تقييم المستخدم الحالي إن وجد
-    $userRating = 0;
-    if ($user) {
-        $userRating = $Card->ratings()
-            ->where('user_id', $user->id)
-            ->value('rating') ?? 0;
+        // تقييم المستخدم الحالي إن وجد
+        $userRating = 0;
+        if ($user) {
+            $userRating = $Card->ratings()
+                ->where('user_id', $user->id)
+                ->value('rating') ?? 0;
+        }
+
+        // متوسط التقييم العام للقصة
+        $averageRating = round($Card->ratings()->avg('rating') ?? 0, 1);
+
+        return inertia('Cards/ReadStory', [
+            'card' => $Card,
+            'user' => $user,
+            'Cardcomment' => $cardcomment,
+            'userRating' => $userRating,
+            'averageRating' => $averageRating,
+        ]);
     }
-
-    // متوسط التقييم العام للقصة
-    $averageRating = round($Card->ratings()->avg('rating') ?? 0, 1);
-
-    return inertia('Cards/ReadStory', [
-        'card' => $Card,
-        'user' => $user,
-        'Cardcomment' => $cardcomment,
-        'userRating' => $userRating,
-        'averageRating' => $averageRating,
-    ]);
-}
 
 
     /**
@@ -187,7 +208,10 @@ class CardController extends Controller
     {
 
         $user = auth()->user();
-        $cards = Card::with(['user', 'userFavorites']) // نحمّل العلاقات
+        $cards = Card::whereHas('user', function (Builder $query) {
+            $query->where('role', '!=', 'محظور');
+        })
+            ->with(['user', 'userFavorites']) // نحمّل العلاقات
             ->latest()
             ->paginate(6)
             ->through(function ($card) use ($user) {
@@ -233,10 +257,6 @@ class CardController extends Controller
     public function rate(Request $request, $cardId)
     {
         $user = auth()->user();
-        if (!$user) {
-            return redirect()->route('login');
-        }
-
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
         ]);
@@ -250,9 +270,15 @@ class CardController extends Controller
                 'rating' => $request->rating,
             ]
         );
+        $averageRating = CardRating::where('card_id', $cardId)
+            ->avg('rating');
 
-        return redirect()->route('Card.listen', $cardId)
-            ->with('success', 'تم حفظ التقييم بنجاح.');
+        // تقريب المتوسط إلى منزلة عشرية واحدة إذا لزم الأمر
+        $averageRating = round($averageRating, 1);
+
+        return redirect()->back()
+            ->with('success', 'تم حفظ التقييم بنجاح.')
+            ->with('averageRating', $averageRating);
     }
 
     public function preview(Request $request)

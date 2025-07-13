@@ -8,10 +8,12 @@ import UploadSound from "../../Component/UploadSound.vue";
 import Title from "../../Component/Title.vue";
 import errorMessage from "../../Component/ErorrsMessage.vue";
 import PrimaryButton from "../../Component/Button.vue";
-import { useForm,router} from "@inertiajs/vue3";
-import { route} from "../../../../vendor/tightenco/ziggy/src/js";
+import { useForm, router } from "@inertiajs/vue3";
+import { route } from "../../../../vendor/tightenco/ziggy/src/js";
 
-
+defineProps({
+    user: Object
+})
 const form = useForm({
     titel: "",
     desc: "",
@@ -21,18 +23,18 @@ const form = useForm({
     sound: null,
 });
 const previewCard = () => {
-  router.visit(route('cards.preview'), {
-    data: {
-      titel: form.titel,
-      desc: form.desc,
-      image: form.image,
-      sound: form.sound,
-      category:form.category,
-      level:form.level
-    },
-    method: 'post',
-    preserveState: true,
-  });
+    router.visit(route('cards.preview'), {
+        data: {
+            titel: form.titel,
+            desc: form.desc,
+            image: form.image,
+            sound: form.sound,
+            category: form.category,
+            level: form.level
+        },
+        method: 'post',
+        preserveState: true,
+    });
 };
 
 
@@ -44,20 +46,37 @@ const submit = () => {
 </script>
 <template>
 
-    <Head title="create create" />
-    <div class="container1" dir="rtl">
+    <Head title="create-story" />
+
+    <div v-if="user.role === 'مغلق'" class=" p-20 bg-white text-lg font-medium leading-relaxed
+     flex flex-col items-center justify-center ">
+        <p class="text-red-500 text-5xl py-5">
+            <i class="fa-solid fa-ban"></i>
+        </p>
+
+        <p class="py-2 text-red-500 text-3xl">
+            عذرا لايمكنك انشاء قصة
+        </p>
+        <p class="py-2 text-[#8AC926] text-3xl">
+            يرجى التواصل مع الادارة لحل المشكلة
+        </p>
+
+    </div>
+
+    <div v-else class="container1" dir="rtl">
         <div class="image"></div>
         <Title class="tiltle" dir="rtl">اضافة قصة جديدة</Title>
+
         <div class="story-form-container text-end" dir="rtl">
             <form dir="ltr" @submit.prevent="submit">
                 <errorMessage :errors="form.errors" />
                 <!-- Title -->
-                <div class="">
+                <div class="px-4">
                     <InputField label="أضف عنوان القصة" v-model="form.titel" placeholder="عنوان القصة" />
                 </div>
 
                 <!-- Story Text -->
-                <div class="">
+                <div class="px-4">
                     <Textarea label="أضف نص القصة" v-model="form.desc" placeholder="نص القصة..." />
                 </div>
 
@@ -71,7 +90,7 @@ const submit = () => {
                         }">
                         تصنيف القصة</label>
                     <div
-                        class="flex items-center py-4 px-4 text-2xl ring-1 border-indigo-100 block w-full text-black rounded-[10px] dark:text-slate-400 border-slate-100 outline-0 bg-slate-100">
+                        class="flex items-center  px-4 text-2xl ring-1 border-indigo-100 block w-full text-black rounded-[10px] dark:text-slate-400 border-slate-100 outline-0 bg-slate-100">
                         <select dir="rtl" id="category" v-model="form.category"
                             class="flex items-center py-4 px-4 text-2xl block w-full text-black rounded-[10px] dark:text-slate-400 border-slate-100 outline-0 bg-slate-100">
                             <option value="مغامرات">مغامرات</option>
@@ -89,7 +108,7 @@ const submit = () => {
                         }">
                         مستوى القصة</label>
                     <div
-                        class="flex items-center py-4 px-4 text-2xl ring-1 border-indigo-100 block w-full text-black rounded-[10px] dark:text-slate-400 border-slate-100 outline-0 bg-slate-100">
+                        class="flex items-center  px-4 text-2xl ring-1 border-indigo-100 block w-full text-black rounded-[10px] dark:text-slate-400 border-slate-100 outline-0 bg-slate-100">
                         <select dir="rtl" id="category" v-model="form.level"
                             class="flex items-center py-4 px-4 text-2xl block w-full text-black rounded-[10px] dark:text-slate-400 border-slate-100 outline-0 bg-slate-100">
                             <option value="1">من عمر 3-5 سنة</option>
@@ -116,8 +135,7 @@ const submit = () => {
                     <PrimaryButton class="btn btn-primary btn-lg custom-button">
                         نشر القصة
                     </PrimaryButton>
-                    <button type="button" @click="previewCard"
-                        class="custom-button btn-primary">
+                    <button type="button" @click="previewCard" class="custom-button btn-primary">
                         معاينة القصة
                     </button>
                 </div>

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('defenation')->nullable();
             $table->string('rate')->default(3);
             $table->string('role')->default('general');
+            $table->string('type');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

@@ -1,5 +1,5 @@
 <script setup>
-import { router, useForm } from '@inertiajs/vue3'
+import { useForm } from '@inertiajs/vue3'
 const props=defineProps({
     user:Object
 })
@@ -25,10 +25,11 @@ const submit=()=>{
             <label for="roles" class="sr-only">Roles:</label>
             <select name="roles" id="roles" class="text-slate-800 bg-slate-200
             text-xs py-1 border-0 outline-0 rounded-lg" v-model="form.role">
-                <option value="admin">Admin</option>
-                <option value="general">General</option>
+                <option value="نشط">نشط</option>
+                <option value="محظور">محظور</option>
 
-                <option value="suspended">Suspended</option>
+                <option value="مغلق">مغلق</option>
+                <option value="مشرف">مشرف</option>
 
             </select>
 

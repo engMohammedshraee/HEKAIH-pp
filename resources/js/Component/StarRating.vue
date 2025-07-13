@@ -5,7 +5,7 @@ import { router } from '@inertiajs/vue3';
 const props = defineProps({
   cardId: Number,
   initialRating: { type: Number, default: 0 },       // تقييم المستخدم
-  averageRating: { type: Number, default: 0 },       // المتوسط العام
+  averageRating: { type: Number, default: 0 },
 });
 
 const hover = ref(0);
@@ -56,7 +56,7 @@ const rate = (value) => {
       </div>
 
       <!-- عرض المتوسط -->
-   
+
     </div>
   </div>
 </template>
