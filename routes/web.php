@@ -58,6 +58,8 @@ Route::middleware(['auth'])
         Route::get('/users', 'show')->name('user.show');
         Route::get('/users/{id}/stories', 'userstories')->name('user.hissotries');
         Route::get('/sotry/{id}', 'showstory')->name('admin.showstory');
+        Route::get('/Reports', 'Reports')->name('admin.Reports');
+
         Route::put('/admin/{user}/role', 'role')->name('admin.role');
         Route::put('/card/{card}/approved', 'approved')->name('admin.approved');
 

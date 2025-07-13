@@ -202,7 +202,11 @@ class CardController extends Controller
         $cards = Card::whereHas('user', function (Builder $query) {
             $query->where('role', '!=', 'محظور');
         })
-            ->with(['user', 'userFavorites']) // نحمّل العلاقات
+            ->with(['user', 'userFavorites'])
+             ->where([
+                ['approved', '=', true],
+
+            ]) // نحمّل العلاقات
             ->latest()
             ->paginate(6)
             ->through(function ($card) use ($user) {

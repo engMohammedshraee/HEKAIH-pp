@@ -1,7 +1,7 @@
 <script setup>
 import Title from "../../Component/Title.vue";
 import SessionMessage from "../../Component/SessionMessage.vue";
-import PaginatinLinks from "../../Component/Pagination.vue";
+import Pagination from "../../Component/Pagination.vue";
 // import inputField from "../../Component/InputField.vue";
 import { router} from "@inertiajs/vue3";
 
@@ -136,7 +136,7 @@ defineOptions({
                 </tbody>
             </table>
             <div class="mt-3 flex items-center justify-center">
-                <PaginatinLinks :paginator="cards" />
+                <Pagination :paginator="cards" />
             </div>
         </div>
 
