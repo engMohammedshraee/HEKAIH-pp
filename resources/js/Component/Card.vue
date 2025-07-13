@@ -70,7 +70,7 @@ const props = defineProps({
                         <div v-if="$page.component === 'User/FavoriteCards'"
                             class="flex items-center justify-between p-2 gap-2">
                             <p @click="toggleFavorite"
-                                class="flex justify-between items-center bg-red-500  rounded-lg px-4 py-2">
+                                class="flex justify-between items-center bg-red-500  rounded-lg px-4 py-1">
                                 <span style="font-size: 20px; color: white">
                                     <FavoriteIcon :cardId="Card.id" :isFavorite="Card.is_favorite" /> حذف
                                 </span>

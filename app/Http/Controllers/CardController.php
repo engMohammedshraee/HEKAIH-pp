@@ -30,31 +30,22 @@ class CardController extends Controller
             'level' => request('level'),
         ];
 
-        if ($user) {
-            $cards = Card::whereHas('user', function (Builder $query) {
-                $query->where('role', '!=', 'محظور');
-            })
-                ->with(['user', 'userFavorites'])
-                ->where([
-                    ['approved', '=', true],
 
-                ])
-                ->filter($filters)
-                ->latest()
-                ->paginate(6)
-                ->through(function ($card) use ($user) {
-                    $card->is_favorite = $user ? $card->userFavorites->contains($user->id) : false;
-                    return $card;
-                });
-        } else {
-            $cards = Card::where([
+        $cards = Card::whereHas('user', function (Builder $query) {
+            $query->where('role', '!=', 'محظور');
+        })
+            ->with(['user', 'userFavorites'])
+            ->where([
                 ['approved', '=', true],
 
             ])
-                ->limit(6);
-            return $cards;
-        }
-
+            ->filter($filters)
+            ->latest()
+            ->paginate(6)
+            ->through(function ($card) use ($user) {
+                $card->is_favorite = $user ? $card->userFavorites->contains($user->id) : false;
+                return $card;
+            });
         return inertia('Home', [
             'cards' => $cards,
             'status' => session('status'),
